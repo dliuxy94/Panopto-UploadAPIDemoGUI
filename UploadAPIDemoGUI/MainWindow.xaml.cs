@@ -39,6 +39,9 @@ namespace UploadAPIDemoGUI
             }
         }
 
+        /// <summary>
+        /// Opens a file chooser and allows the user to pick which file to upload
+        /// </summary>
         private void Browse_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -55,6 +58,9 @@ namespace UploadAPIDemoGUI
             }
         }
 
+        /// <summary>
+        /// Uploads the selected file to designated server and folder on click
+        /// </summary>
         private void Upload_Click(object sender, RoutedEventArgs e)
         {
             bool hasError = false;
@@ -73,7 +79,7 @@ namespace UploadAPIDemoGUI
                     FilePath.Text,
                     DEFAULT_PARTSIZE);
             }
-            catch (Exception ex)
+            catch (Exception ex) // error handling and status
             {
                 hasError = true;
                 Status.Content = "Upload Failed: " + ex.Message;
