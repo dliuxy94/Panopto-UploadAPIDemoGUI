@@ -24,13 +24,13 @@ namespace UploadAPIDemo
         {
             string adminAuthCookie = Common.LogonAndGetCookie(userName, userPassword);
 
-            string deliveryID = CreateSession(adminAuthCookie, folderID, sessionName);
+            string sessionID = CreateSession(adminAuthCookie, folderID, sessionName);
 
-            Upload uploadInfo = CreateUpload(adminAuthCookie, deliveryID, sessionName);
+            Upload uploadInfo = CreateUpload(adminAuthCookie, sessionID, sessionName);
 
             UploadSingleFile(uploadInfo.UploadTarget, filePath, partSize);
 
-            ProcessSession(uploadInfo, adminAuthCookie, deliveryID);
+            ProcessSession(uploadInfo, adminAuthCookie, sessionID);
         }
 
         /// <summary>
@@ -60,17 +60,17 @@ namespace UploadAPIDemo
         /// Create an upload
         /// </summary>
         /// <param name="authCookie">authorization cookie</param>
-        /// <param name="deliveryID">file Session ID</param>
+        /// <param name="sessionID">file Session ID</param>
         /// <param name="sessionName">session display name</param>
         /// <returns>Upload struct containing upload info</returns>
-        public static Upload CreateUpload(string authCookie, string deliveryID, string sessionName)
+        public static Upload CreateUpload(string authCookie, string sessionID, string sessionName)
         {
             Upload upload = Common.CreateRestObject<Upload>(
                 authCookie,
                 "upload",
                 new Upload()
                 {
-                    SessionID = deliveryID,
+                    SessionID = sessionID,
                     UploadTarget = sessionName
                 });
 
@@ -95,15 +95,15 @@ namespace UploadAPIDemo
         /// </summary>
         /// <param name="upload">upload struct containing upload info</param>
         /// <param name="authCookie">authorization cookie</param>
-        /// <param name="deliveryID">upload Session ID</param>
-        public static void ProcessSession(Upload upload, string authCookie, string deliveryID)
+        /// <param name="sessionID">upload Session ID</param>
+        public static void ProcessSession(Upload upload, string authCookie, string sessionID)
         {
             Process process = Common.UpdateRestObject<Process>(
                 authCookie,
                 "upload",
                 new Process()
                 {
-                    SessionID = deliveryID,
+                    SessionID = sessionID,
                     ID = upload.ID,
                     UploadTarget = upload.UploadTarget,
                     State = 1
